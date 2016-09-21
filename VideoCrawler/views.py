@@ -14,14 +14,18 @@ def video_crawler(request):
 	for i in range(1,10):
 		jizzdr_url = jizzdr_url_tag + str(i)
 		r = urllib2.Request(jizzdr_url)
-		f = urllib2.urlopen(r, data=None, timeout=30)
+		f = None
+		try:
+			f = urllib2.urlopen(r, data=None, timeout=30)
+		except:
+			continue
 		soup = BeautifulSoup(f.read(),"html.parser")
 		video_thumb_list = soup.findAll('a',{'class','thumb'})
 		video_title_list = soup.findAll('a',{'class','title'})
 		for index in range(0,len(video_thumb_list)):
 			video_thumb_tag = video_thumb_list[index]
 			video_title_tag = video_title_list[index]
-			href = video_thumb_tag['href']
+			href = "http://www.jizzdr.com" + video_thumb_tag['href']
 			img_link = video_thumb_tag.find('img')['src']
 			video_title = video_title_tag['title']
 			digit_mode = re.compile(r'\d+')
