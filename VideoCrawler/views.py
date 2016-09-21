@@ -15,11 +15,12 @@ def video_crawler(request):
 		jizzdr_url = jizzdr_url_tag + str(i)
 		r = urllib2.Request(jizzdr_url)
 		f = None
+		soup = None
 		try:
 			f = urllib2.urlopen(r, data=None, timeout=30)
+			soup = BeautifulSoup(f.read(),"html.parser")
 		except:
 			continue
-		soup = BeautifulSoup(f.read(),"html.parser")
 		video_thumb_list = soup.findAll('a',{'class','thumb'})
 		video_title_list = soup.findAll('a',{'class','title'})
 		for index in range(0,len(video_thumb_list)):
