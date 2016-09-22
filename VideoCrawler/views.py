@@ -10,11 +10,12 @@ from VideoCrawler.models import *
 # Create your views here.
 def video_crawler(request):
 	response = {}
+	modify_number = 0
 	jizzdr_url_tag = "http://www.jizzdr.com/porn-video?p="
 	for i in range(1,10):
-		jizzdr_url = jizzdr_url_tag + str(i)
+		jizzdr_url = jizzdr_url_tag + str(i)	
 		r = urllib2.Request(jizzdr_url)
-		f = None
+		f = None	
 		soup = None
 		try:
 			f = urllib2.urlopen(r, data=None, timeout=30)
@@ -33,5 +34,6 @@ def video_crawler(request):
 			video_number = int(digit_mode.findall(href)[0])
 			if len(porn_video_info.objects.filter(number=video_number)) == 0:
 				porn_video_info.objects.create(number=video_number,desc=video_title,link=href,thumb=img_link)
-
+				modify_number += 1
+	response['modify_number'] = modify_number
 	return HttpResponse(json.dumps(response,ensure_ascii=False,indent=2))
